@@ -1,5 +1,14 @@
-function dummy (blogs) {
+function dummy(blogs) {
     return 1;
 }
 
-module.exports = dummy;
+function totalLikes(blogs) {
+    let likesSum = 0;
+    blogs.map(blog => likesSum+= blog.likes);
+    return likesSum;
+}
+
+module.exports = {
+    dummy,
+    totalLikes
+};
