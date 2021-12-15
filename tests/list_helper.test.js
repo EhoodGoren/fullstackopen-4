@@ -1,4 +1,4 @@
-const { dummy, totalLikes, favoriteBlog, mostBlogsAuthor } = require('../utils/list_helper');
+const { dummy, totalLikes, favoriteBlog, mostBlogsAuthor, mostLikesAuthor } = require('../utils/list_helper');
 
 test('dummy returns one', () => {
     const blogs = [];
@@ -75,5 +75,33 @@ describe('most blogs author', () => {
             blogs: 2
         }
         expect(mostBlogsAuthor(threeBlogList)).toEqual(expectedResult);
+    })
+})
+
+describe('most likes author', () => {
+    test('of an empty list is undefined', () => {
+        expect(mostLikesAuthor([])).toBe(undefined);
+    })
+    test("of a list with one blog is the blog's author", () => {
+        const { author, likes } = listWithOneBlog[0];
+        const expectedResult = {
+            author,
+            likes
+        }
+        expect(mostLikesAuthor(listWithOneBlog)).toEqual(expectedResult);
+    })
+    test("among other blog authors is the one who has the most likes its posts", () => {
+        const anotherBlog = {
+            title: 'title',
+            author: 'someone else',
+            url: 'bla bla',
+            likes: 10
+        };
+        const testList = [...threeBlogList, anotherBlog];
+        const expectedResult = {
+            author: anotherBlog.author,
+            likes: anotherBlog.likes
+        }
+        expect(mostLikesAuthor(testList)).toEqual(expectedResult);
     })
 })
