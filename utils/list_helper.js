@@ -18,8 +18,31 @@ function favoriteBlog(blogs) {
     return highestLikesBlog;
 }
 
+function mostBlogsAuthor(blogs) {
+    const authors = {}
+    blogs.map(blog => {
+        authors[blog.author] = authors[blog.author] ?
+            ++authors[blog.author] : 
+            1;
+    })
+    const mostBlogs = Math.max(...Object.values(authors));
+    for(let author in authors){
+        if(authors[author] === mostBlogs){
+            console.log({
+                author,
+                blogs: mostBlogs
+            })
+            return {
+                author,
+                blogs: mostBlogs
+            }
+        }
+    }
+}
+
 module.exports = {
     dummy,
     totalLikes,
-    favoriteBlog
+    favoriteBlog,
+    mostBlogsAuthor
 };
