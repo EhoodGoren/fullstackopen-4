@@ -8,7 +8,18 @@ function totalLikes(blogs) {
     return likesSum;
 }
 
+function favoriteBlog(blogs) {
+    let highestLikesBlog;
+    blogs.map(blog => {
+        if(!highestLikesBlog || blog.likes > highestLikesBlog.likes){
+            highestLikesBlog = blog;
+        }
+    })
+    return highestLikesBlog;
+}
+
 module.exports = {
     dummy,
-    totalLikes
+    totalLikes,
+    favoriteBlog
 };
