@@ -2,7 +2,6 @@ const Blog = require('../models/blog');
 
 async function getAllBlogs(req, res) {
     const blogs = await Blog.find({});
-    console.log(blogs);
     res.json(blogs);
 }
 

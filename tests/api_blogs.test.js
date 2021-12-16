@@ -37,6 +37,11 @@ describe('adding a new blog', () => {
         )
     })
 })
+test('_id property of each blog is replaced with id', async () => {
+    const existingBlogs = await api.get('/api/blogs');
+    expect(existingBlogs.body[0]._id).toBeFalsy();
+    expect(existingBlogs.body[0].id).toBeDefined();
+})
 
 afterAll(() => {
     mongoose.connection.close();
