@@ -5,7 +5,10 @@ const mongoose = require('mongoose');
 const apiRouter = require('./src/routers/apiRouter')
 
 const app = express();
-mongoose.connect(process.env.DATABASE, () => {
+const database = process.env.NODE_ENV === 'test' ?
+    process.env.TEST_DATABASE :
+    process.env.DATABASE;
+mongoose.connect(database, () => {
     console.log('Database connected!');
 })
 
