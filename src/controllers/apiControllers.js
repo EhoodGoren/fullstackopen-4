@@ -6,8 +6,8 @@ async function getAllBlogs(req, res) {
 }
 
 async function postBlog(req, res) {
-    const { title, author, url, likes } = req.body
-    if(!title || !author || !url || !likes){
+    const { title, author, url, likes=0 } = req.body
+    if(!title || !author || !url ){
         return res.status(400).send('Missing information');
     }
     const postResponse = await Blog.create({ title, author, url, likes });

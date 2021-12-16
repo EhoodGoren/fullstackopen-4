@@ -17,17 +17,29 @@ test('database starts as empty array', async () => {
     expect(blogs.body).toEqual([]);
 })
 describe('adding a new blog', () => {
-    test('will send status 400 if some information is missing in the body', async () => {
+    const blog = {
+        title: 'a title',
+        author: 'an author',
+        url: 'www.something.com',
+        likes: 30,
+    };
+    test('will respond with status 400 if some keys are missing in the body', async () => {
         const response = await api.post('/api/blogs');
         expect(response.status).toBe(400);
     })
-    test('can post a new blog when body includes all the needed keys', async () => {
-        const blog = {
-            title: 'a title',
-            author: 'an author',
-            url: 'www.something.com',
-            likes: 30,
-        };
+    test('without including "likes" will add field "likes" with value 0', async () => {
+        const noLikesBlog = {...blog};
+        delete noLikesBlog.likes;
+        await api.post('/api/blogs').send(noLikesBlog);
+        const existingBlogs = await api.get('/api/blogs');
+        expect(existingBlogs.body[0]).toEqual(
+            expect.objectContaining({
+            ...noLikesBlog,
+            likes: 0
+        }));
+        await Blog.deleteMany({likes: 0})
+    })
+    test('is possible when body includes all the needed keys', async () => {
         const response = await api.post('/api/blogs').send(blog);
         expect(response.status).toBe(201);
         const existingBlogs = await api.get('/api/blogs');
