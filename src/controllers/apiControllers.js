@@ -14,7 +14,18 @@ async function postBlog(req, res) {
     res.status(201).json(postResponse);
 }
 
+async function deleteBlog(req, res) {
+    const { id } = req.params;
+    try{
+        await Blog.deleteOne({_id: id});
+        return res.status(200).send('Deleted Successfully');
+    } catch(error) {
+        return res.status(404).send("Can't find blog");
+    }
+}
+
 module.exports = {
     getAllBlogs,
-    postBlog
+    postBlog,
+    deleteBlog
 }
