@@ -18,8 +18,19 @@ async function deleteBlog(req, res) {
     const { id } = req.params;
     try{
         await Blog.deleteOne({_id: id});
-        return res.status(200).send('Deleted Successfully');
+        return res.status(200).send('Deleted successfully');
     } catch(error) {
+        return res.status(404).send("Can't find blog");
+    }
+}
+
+async function updateBlog(req, res) {
+    const { id } = req.params;
+    const changes = req.body;
+    try {
+        await Blog.findByIdAndUpdate(id, changes);
+        return res.status(200).send('Updated successfully');
+    } catch (error) {
         return res.status(404).send("Can't find blog");
     }
 }
@@ -27,5 +38,6 @@ async function deleteBlog(req, res) {
 module.exports = {
     getAllBlogs,
     postBlog,
-    deleteBlog
+    deleteBlog,
+    updateBlog
 }

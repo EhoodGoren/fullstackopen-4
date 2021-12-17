@@ -70,6 +70,24 @@ describe('deleting a blog', () => {
     })
 })
 
+describe('updating a blog', () => {
+    test('with an invalid id will fail with status 400', async () => {
+        const updateResponse = await api.patch('/api/blogs');
+        expect(updateResponse.status).toBe(404);
+    })
+    test('with a valid id will update blog', async () => {
+        const getResponse = await api.get('/api/blogs');
+        const blog = getResponse.body[0];
+        const updatedBlog = {...blog, likes: 33};
+        const updateResponse = await api.patch(`/api/blogs/${blog.id}`).send(updatedBlog);
+        expect(updateResponse.status).toBe(200);
+        const updatedListResponse = await api.get('/api/blogs');
+        const updatedList = updatedListResponse.body;
+        expect(updatedList.length).toBe(1);
+        expect(updatedList[0]).toEqual(expect.objectContaining(updatedBlog));
+    })
+})
+
 afterAll(() => {
     mongoose.connection.close();
 })
