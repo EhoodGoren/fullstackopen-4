@@ -20,9 +20,16 @@ async function addUser(req, res) {
     if(!username || !password || !name){
         return res.status(400).send('Missing information');
     }
+    if(username.length < 4 || password.length < 4){
+        return res.status(400).send('Username and password must both be atleast 4 characters long');
+    }
     const encryptedPassword = await bcrypt.hash(`${password}`, saltRounds);
-    const postResponse = await User.create({username, password: encryptedPassword, name});
-    res.status(201).json('Added user successfully');
+    try {
+        await User.create({username, password: encryptedPassword, name});
+        res.status(201).json('Added user successfully');
+    } catch (error) {
+        res.status(400).send('Username already taken. Please choose another');
+    }
 }
 
 module.exports = {
