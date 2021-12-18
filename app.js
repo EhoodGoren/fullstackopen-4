@@ -2,7 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const apiRouter = require('./src/routers/apiRouter')
+const blogsRouter = require('./src/routers/blogsRouter');
+const usersRouter =  require('./src/routers/usersRouter');
 
 const app = express();
 const database = process.env.NODE_ENV === 'test' ?
@@ -15,6 +16,7 @@ mongoose.connect(database, () => {
 app.use(express.json());
 app.use(cors());
 
-app.use('/api', apiRouter)
+app.use('/api/blogs', blogsRouter);
+app.use('/api/users', usersRouter);
 
 module.exports = app;
