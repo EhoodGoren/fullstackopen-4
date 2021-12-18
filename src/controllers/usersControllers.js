@@ -12,7 +12,8 @@ async function getUsers(req, res) {
             id
         }
     });
-    res.json(noPasswordUsers);
+    const populatedUsers = await User.find({}).populate('blogs', { title:1, author:1, url:1, likes:1 });
+    res.json(populatedUsers);
 }
 
 async function addUser(req, res) {
@@ -25,7 +26,7 @@ async function addUser(req, res) {
     }
     const encryptedPassword = await bcrypt.hash(`${password}`, saltRounds);
     try {
-        await User.create({username, password: encryptedPassword, name});
+        await User.create({username, password: encryptedPassword, name, blogs: []});
         res.status(201).json('Added user successfully');
     } catch (error) {
         res.status(400).send('Username already taken. Please choose another');

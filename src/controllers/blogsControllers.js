@@ -1,7 +1,8 @@
 const Blog = require('../models/blog');
+const User = require('../models/user');
 
 async function getAllBlogs(req, res) {
-    const blogs = await Blog.find({});
+    const blogs = await Blog.find({}).populate('user', { username:1, name:1 });
     res.json(blogs);
 }
 
@@ -10,7 +11,10 @@ async function postBlog(req, res) {
     if(!title || !author || !url ){
         return res.status(400).send('Missing information');
     }
-    const postResponse = await Blog.create({ title, author, url, likes });
+    const user = await User.findOne({username: author});
+    const postResponse = await Blog.create({ title, author, url, likes, user: user.id });
+    user.blogs = user.blogs.concat(postResponse.id);
+    await user.save();
     res.status(201).json(postResponse);
 }
 
