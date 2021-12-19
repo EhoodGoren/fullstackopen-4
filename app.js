@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const blogsRouter = require('./src/routers/blogsRouter');
 const usersRouter =  require('./src/routers/usersRouter');
 const userAuth = require('./src/middlewares/userAuth');
+const userExtractor = require('./src/middlewares/userExtractor');
 
 const app = express();
 const database = process.env.NODE_ENV === 'test' ?
@@ -19,6 +20,6 @@ app.use(cors());
 
 app.use('/api/users', usersRouter);
 app.use(userAuth);
-app.use('/api/blogs', blogsRouter);
+app.use('/api/blogs', userExtractor, blogsRouter);
 
 module.exports = app;

@@ -8,12 +8,13 @@ async function getAllBlogs(req, res) {
 
 async function postBlog(req, res) {
     const { title, url, likes=0 } = req.body
-    const author = req.token;
+    const author = req.user;
+    const authorId = req.token;
     if(!title || !author || !url ){
         return res.status(400).send('Missing information');
     }
-    const user = await User.findOne({_id: author});
-    const postResponse = await Blog.create({ title, author: user.username, url, likes, user: user.id });
+    const user = await User.findOne({_id: authorId});
+    const postResponse = await Blog.create({ title, author, url, likes, user: user.id });
     user.blogs = user.blogs.concat(postResponse.id);
     await user.save();
     res.status(201).json(postResponse);
