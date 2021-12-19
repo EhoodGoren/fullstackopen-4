@@ -28,8 +28,8 @@ async function addUser(req, res) {
     }
     const encryptedPassword = await bcrypt.hash(`${password}`, saltRounds);
     try {
-        await User.create({username, password: encryptedPassword, name, blogs: []});
-        const userToken = jwt.sign(username, process.env.SECRET);
+        const addedUser = await User.create({username, password: encryptedPassword, name, blogs: []});
+        const userToken = jwt.sign(addedUser.id, process.env.SECRET);
         res.status(201).send(userToken);
     } catch (error) {
         res.status(400).send('Username already taken. Please choose another');
